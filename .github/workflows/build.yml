@@ -19,7 +19,7 @@ jobs:
 
     - name: Compile DLL Directo
       run: |
-        cl.exe /LD /O2 /EHsc /I"AseApiSource/v3.0/Developer/Header" /I"AseApiSource/v3.0/Developer/Header/API" TekBowFix.cpp /link /LIBPATH:"AseApiSource/v3.0/Developer/Lib" ArkServerApi.lib /OUT:TekBowFix.dll
+        cl.exe /LD /O2 /EHsc /I"AseApiSource/include" TekBowFix.cpp /link /LIBPATH:"AseApiSource/lib" ArkServerApi.lib /OUT:TekBowFix.dll
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
