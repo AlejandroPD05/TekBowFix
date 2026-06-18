@@ -1,0 +1,29 @@
+name: Build Plugin
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Download ArkServerAPI SDK
+      run: |
+        Invoke-WebRequest -Uri "https://github.com/ArkServerAPI/Ark-Server-API/archive/refs/heads/master.zip" -OutFile "api.zip"
+        Expand-Archive -Path "api.zip" -DestinationPath "ArkApi"
+        
+    - name: Compile DLL
+      run: |
+        msbuild /p:Configuration=Release /p:Platform=x64 TekBowFix.sln
+        
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: TekBowFix-Binario
+        path: x64/Release/TekBowFix.dll
