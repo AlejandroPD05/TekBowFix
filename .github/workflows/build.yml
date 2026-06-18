@@ -13,29 +13,14 @@ jobs:
     - name: Setup MSVC (Compilador nativo)
       uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Crear Entorno SDK Local (Sin Enlaces de GitHub)
-      shell: powershell
+    - name: Clone AseApi SDK (Público)
       run: |
-        # Creamos las carpetas manualmente dentro de la máquina virtual
-        New-Item -ItemType Directory -Force -Path "ArkApi/Header"
-        New-Item -ItemType Directory -Force -Path "ArkApi/Lib"
-        
-        # Descargamos el SDK desde un servidor de almacenamiento alternativo público (un mirror estable de la comunidad)
-        # Este enlace no pertenece a GitHub, por lo que no se ve afectado por sus bloqueos
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        try {
-            Invoke-WebRequest -Uri "https://ark-server-api.com/resources/ase-server-api.32/download" -OutFile "api_base.zip" -ErrorAction Stop
-            # Si el archivo del foro principal contiene la estructura base, la extraemos
-            Expand-Archive -Path "api_base.zip" -DestinationPath "ArkApiExtract" -ErrorAction SilentlyContinue
-        } catch {
-            Write-Host "Usando modo de contingencia local..."
-        }
+        git clone https://github.com/ArkServerApi/AseApi.git AseApiSource
 
     - name: Compile DLL Directo
       run: |
-        # Si tienes tus propios archivos Header y Lib subidos a tu repositorio en una carpeta llamada 'ArkApi', el compilador los usará directamente aquí:
-        cl.exe /LD /O2 /EHsc /I"ArkApi/Header" TekBowFix.cpp /link /LIBPATH:"ArkApi/Lib" ArkServerApi.lib /OUT:TekBowFix.dll
-        
+        cl.exe /LD /O2 /EHsc /I"AseApiSource/v3.0/Developer/Header" TekBowFix.cpp /link /LIBPATH:"AseApiSource/v3.0/Developer/Lib" ArkServerApi.lib /OUT:TekBowFix.dll
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
