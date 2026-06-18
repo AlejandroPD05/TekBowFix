@@ -13,18 +13,14 @@ jobs:
     - name: Setup MSVC (Compilador nativo)
       uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Download ArkServerAPI SDK
-      shell: powershell
+    - name: Clone ArkServerAPI Source (Headers y Libs)
       run: |
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        Invoke-WebRequest -Uri "https://github.com/skp90/Ark-Server-API/archive/refs/heads/master.zip" -OutFile "api.zip"
-        Expand-Archive -Path "api.zip" -DestinationPath "."
-        Rename-Item -Path "Ark-Server-API-master" -NewName "ArkApi"
-        
+        git clone https://github.com/ServersHub/Ark-Server-API.git ArkApiSource
+
     - name: Compile DLL Directo
       run: |
-        cl.exe /LD /O2 /EHsc /I"ArkApi/Header" TekBowFix.cpp /link /LIBPATH:"ArkApi/Lib" ArkServerApi.lib /OUT:TekBowFix.dll
-        
+        cl.exe /LD /O2 /EHsc /I"ArkApiSource/v3.0/Developer/Header" TekBowFix.cpp /link /LIBPATH:"ArkApiSource/v3.0/Developer/Lib" ArkServerApi.lib /OUT:TekBowFix.dll
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
