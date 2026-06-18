@@ -1,0 +1,7 @@
+{
+  "Name": "TekBowFix",
+  "Version": 1.0,
+  "Description": "Bloquea por completo el daño y efectos de las flechas tranq y fuego del arco tek en jugadores humanos.",
+  "Author": "Alejandro PD",
+  "RequiredApiVersion": 3.0
+}
