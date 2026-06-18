@@ -13,9 +13,11 @@ jobs:
     - name: Setup MSVC (Compilador nativo)
       uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Clone ArkServerAPI SDK
+    - name: Download ArkServerAPI SDK (Espejo Público)
       run: |
-        git clone https://github.com/ArkServerAPI/Ark-Server-API.git ArkApi
+        curl -L -o api.zip "https://github.com/skp90/Ark-Server-API/archive/refs/heads/master.zip"
+        tar -xf api.zip
+        rename Ark-Server-API-master ArkApi
         
     - name: Compile DLL Directo
       run: |
