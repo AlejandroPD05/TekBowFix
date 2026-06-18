@@ -13,14 +13,13 @@ jobs:
     - name: Setup MSVC (Compilador nativo)
       uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Download ArkServerAPI SDK
+    - name: Clone ArkServerAPI SDK
       run: |
-        Invoke-WebRequest -Uri "https://github.com/ArkServerAPI/Ark-Server-API/archive/refs/heads/master.zip" -OutFile "api.zip"
-        Expand-Archive -Path "api.zip" -DestinationPath "ArkApi"
+        git clone https://github.com/ArkServerAPI/Ark-Server-API.git ArkApi
         
     - name: Compile DLL Directo
       run: |
-        cl.exe /LD /O2 /EHsc /I"ArkApi/Ark-Server-API-master/Header" TekBowFix.cpp /link /LIBPATH:"ArkApi/Ark-Server-API-master/Lib" ArkServerApi.lib /OUT:TekBowFix.dll
+        cl.exe /LD /O2 /EHsc /I"ArkApi/Header" TekBowFix.cpp /link /LIBPATH:"ArkApi/Lib" ArkServerApi.lib /OUT:TekBowFix.dll
         
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
