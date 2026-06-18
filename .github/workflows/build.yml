@@ -10,20 +10,20 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
+    - name: Setup MSVC (Compilador nativo)
+      uses: ilammy/msvc-dev-cmd@v1
 
     - name: Download ArkServerAPI SDK
       run: |
         Invoke-WebRequest -Uri "https://github.com/ArkServerAPI/Ark-Server-API/archive/refs/heads/master.zip" -OutFile "api.zip"
         Expand-Archive -Path "api.zip" -DestinationPath "ArkApi"
         
-    - name: Compile DLL
+    - name: Compile DLL Directo
       run: |
-        msbuild /p:Configuration=Release /p:Platform=x64 TekBowFix.sln
+        cl.exe /LD /O2 /EHsc /I"ArkApi/Ark-Server-API-master/Header" TekBowFix.cpp /link /LIBPATH:"ArkApi/Ark-Server-API-master/Lib" ArkServerApi.lib /OUT:TekBowFix.dll
         
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: TekBowFix-Binario
-        path: x64/Release/TekBowFix.dll
+        path: TekBowFix.dll
